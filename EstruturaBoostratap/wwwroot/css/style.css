@@ -49,22 +49,27 @@ span {
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
-.hidden{
+.hidden {
     display: none;
 }
-.clear{
+
+.clear {
     clear: both;
 }
+
 .clear-titulo {
     clear: both;
     border-bottom: 1px solid #EEF0F1;
 }
-.fLeft{
+
+.fLeft {
     float: left;
 }
-.fRight{
+
+.fRight {
     float: right
 }
+
 .wrapper {
     display: flex;
     align-items: stretch;
@@ -284,139 +289,170 @@ a.article:hover {
         display: none;
     }
 }
-.direitos-autorais{
+
+.direitos-autorais {
     font-weight: bold;
     font-size: 12px;
     text-align: left;
     margin-bottom: 0;
 }
-.versao{
+
+.versao {
     text-align: right;
     font-size: 12px;
     font-weight: bold;
 }
+
 .centralize {
     margin: 0 auto;
     display: table;
 }
+
 .back-logo {
     background: #363636;
     width: 100%;
 }
-.logo-login{
+
+.logo-login {
     margin: 90px 0 60px;
     width: 262px;
     height: 65px;
 }
-.logo-login img{
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-}
+
+    .logo-login img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+
 .titulo-login {
     font-size: 48px;
     font-weight: bold;
     font-family: Arial;
     color: #27272E;
 }
+
 .dizer-login {
     color: #27272E;
     font-size: 15px;
 }
-.form-login{
+
+.form-login {
     margin-top: 35px;
 }
+
     .form-login label {
         color: #27272E;
         font-weight: bold;
         font-size: 14px;
     }
+
 .esqueci-senha {
     float: right;
     text-decoration: underline;
     color: #4FCAFF;
 }
+
     .esqueci-senha a {
         color: #4FCAFF;
     }
+
 .identificacao {
     color: #e9ecef;
     margin-top: 16px;
 }
+
     .identificacao .usuario {
         float: left;
         padding: 0 16px;
         border-right: 1px solid #EEF0F1;
     }
-    .identificacao .deslogar{
+
+    .identificacao .deslogar {
         float: left;
         padding: 0 16px;
     }
-        .identificacao .deslogar i{
+
+        .identificacao .deslogar i {
             float: right;
             margin-left: 5px;
         }
+
         .identificacao .deslogar:hover {
             color: #D72D3B;
         }
+
 .btn-info {
     margin-left: 10px;
     background: #e9e9e9;
     border-color: #e9e9e9;
     color: #ACACAC;
 }
+
     .btn-info:hover {
         background: #ACACAC;
         border-color: #ACACAC;
         color: #e9e9e9;
     }
+
 .active .btn-info {
     margin-left: 0;
 }
-.titulo-pagina{
+
+.titulo-pagina {
     font-family: Arial;
     font-weight: bold;
 }
-.top-pagina{
+
+.top-pagina {
     margin-top: 20px;
 }
+
 .titulo-busca {
     float: left;
     margin-top: 3px;
     color: #686868;
 }
-.campo-busca{
+
+.campo-busca {
     float: left;
     margin-left: 5px;
 }
+
 .selecione-projeto {
     width: 100%;
 }
-.avaliacao-estrela{
+
+.avaliacao-estrela {
     float: left;
     margin-top: 1px;
 }
-.avaliacao-quantidade{
+
+.avaliacao-quantidade {
     float: left;
     margin: 2px 6px;
 }
-.tipos-pesquisa{
+
+.tipos-pesquisa {
     background: #FFFFFF;
     border-radius: 10px;
     margin-top: 15px;
     padding: 33px 25px;
 }
-.btn-pesquisar{
+
+.btn-pesquisar {
     width: 130px;
     height: 50px;
     border-radius: 7px;
 }
+
 .back-tipo-filtros {
     background: #F9F9F9;
     border-radius: 10px;
     padding: 8px 10px;
     display: table;
 }
+
 .btn-ciclo, .btn-datas {
     color: #D72D3B;
     float: left;
@@ -424,63 +460,78 @@ a.article:hover {
     border-radius: 10px;
     cursor: pointer;
 }
+
 .btn-datas {
     margin-left: 10px;
 }
+
     .btn-ciclo:hover, .btn-datas:hover, .filtro-ativo {
         background: #D72D3B;
         color: #FFFFFF;
     }
+
 .tipo-filtros {
     color: #686868;
     margin: 10px 10px;
 }
+
 .grid-result {
     background: #FFFFFF;
     border-radius: 10px;
     margin-top: 15px;
     padding: 25px 25px;
 }
-.subtitulo-pagina{
+
+.subtitulo-pagina {
     font-weight: bold;
     margin-bottom: 35px;
 }
+
 .campo-data {
     margin-top: -5px;
     color: #686868;
 }
+
     .campo-data label {
         margin-bottom: 0;
     }
+
 .btn-calendario {
     border-right: 0;
     border-radius: 5px 0 0 5px !important;
 }
-.selecione-datainicial, .selecione-datafinal{
+
+.selecione-datainicial, .selecione-datafinal {
     width: 45%;
     float: left;
 }
-.selecione-datafinal{
+
+.selecione-datafinal {
     margin-left: 25px;
 }
-.selecione-ciclo{
+
+.selecione-ciclo {
     float: left;
     width: 45%;
 }
+
 .nome-clico {
     display: block;
     width: 100%;
     color: #686868;
     margin-top: -5px;
 }
-.selecione-ciclo label{
+
+.selecione-ciclo label {
     border-radius: 5px 0 0 5px !important;
 }
-.selecione-comparar{
+
+.selecione-comparar {
     float: left;
     margin-left: 14px;
     width: 51%;
 }
+
 .campos-radios {
     background: #F7FAFC;
     padding: 7px 8px;
@@ -488,13 +539,16 @@ a.article:hover {
     font-weight: bold;
     border-radius: 5px;
 }
-.btn-pesquisar-data-clico{
+
+.btn-pesquisar-data-clico {
     float: right;
     margin-top: 12px;
 }
-.final-pages{
+
+.final-pages {
     margin-top: 33px;
 }
+
 .qtd-registro {
     background: #F0F5FA;
     padding: 15px 5px;
@@ -504,56 +558,107 @@ a.article:hover {
     text-align: center;
     font-weight: bold;
 }
+
 .page-link {
     color: #444444;
 }
+
     .page-link:hover, .pg-ativa {
         color: #D72D3B !important;
         background: #e9ecef;
         border-color: #dee2e6;
     }
-.area-grafico{
+
+.area-grafico {
     width: 100%;
     height: 370px;
     max-height: 370px;
     margin: 0 auto;
 }
+
 .nome-cliente {
     float: left;
     margin: 3px 6px;
     font-weight: bold;
     color: #495057;
 }
+
 .titulo-descricao {
     font-weight: bold;
 }
+
 .descricao-analise {
     font-size: 22px;
     color: #686868;
 }
-.icone-descricao{
+
+.icone-descricao {
     font-size: 35px;
     float: left;
     margin-right: 15px;
 }
-.form-check-alinhamento{
+
+.form-check-alinhamento {
     margin-top: 40px;
     margin-left: 15px;
 }
-.form-check-alinhamento-radio{
+
+.form-check-alinhamento-radio {
     margin-top: 10px;
 }
-.menu-listar{
+
+.menu-listar {
     margin: 15px 30px 0 0;
 }
-.menu-listar .btn-filtrar{
-    float: left;
-    height: 38px;
-    margin-bottom: 12px;
-}
-.menu-listar .btn-novo{
-    float: right;
-}
+
+    .menu-listar .btn-filtrar {
+        float: left;
+        height: 38px;
+        margin-bottom: 12px;
+    }
+
+    .menu-listar .btn-novo {
+        float: right;
+    }
+
 @media only screen and (max-width: 600px) {
-    .esconder{display: none;}
+    .esconder {
+        display: none;
+    }
+}
+
+.row {
+    margin-top: 15px;
+}
+
+.botao_telefone {
+    margin-top: 23px;
+    height: 36px;
+}
+
+.botao_final {
+    margin-top: 20px;
+}
+
+.alert div {
+    width: 100%;
+}
+
+.add-telefone {
+    font-size: 16px;
+}
+
+#Enderecos-Devedor {
+    margin-top: 30px;
+}
+
+#Contratos-Devedor {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#Dados-Devedor .text-success {
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 0;
 }

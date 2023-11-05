@@ -11,12 +11,14 @@ namespace EstruturaBoostratap.Controllers
 {
     public class DevedoresController : BasicController
     {
-        public ActionResult Index(int page)
+        public ActionResult Index(int page, string Mensagem, int Tipo)
         {
 
             DevedoresModelView dados = new DevedoresModelView
             {
-                PageAtual = page == 0 ? 1 : page
+                PageAtual = page == 0 ? 1 : page,
+                Mensagem = Mensagem,
+                Tipo = Tipo
             };
 
             dados.ListaDevedores = dados.ListDevedores();
@@ -36,10 +38,7 @@ namespace EstruturaBoostratap.Controllers
                 NomeDevedor = collection["NomeDevedor"],
                 EmailDevedor = collection["EmailDevedor"],
                 CPFDevedor =  collection["CPFDevedor"],
-                Contrato = collection["Contrato"],
-                DataPagamento = Convert.ToDateTime(collection["DataPagamento"]),
-                ValorPrincipal = collection["ValorPrincipal"],
-                ValorAtualizado = collection["ValorAtualizado"]
+                RGDevedor = collection["RGDevedor"]
             };
 
             try
@@ -47,6 +46,34 @@ namespace EstruturaBoostratap.Controllers
                 dados.ListaDevedores = dados.ListDevedores();
 
                 return View(dados);
+            }
+            catch (Exception ex)
+            {
+                dados.MensagemReport = ex.Message;
+                return View(dados);
+            }
+        }
+
+
+        public ActionResult TelefonesDevedor(int id)
+        {
+            DevedoresModelView dados = new DevedoresModelView();
+
+            dados.ListaTelefoneDevedores = dados.GetListaTelefones(id);
+
+            return View(dados);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            DevedoresModelView dados = new DevedoresModelView();
+
+            try
+            {
+
+                dados.DeleteDevedor(id);
+
+                return RedirectToAction("index", new { Mensagem = "Ação Excecutada!", Tipo = 4 });
             }
             catch (Exception ex)
             {

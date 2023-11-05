@@ -14,13 +14,16 @@ namespace EstruturaBoostratap.ModelViews
     {
         #region *** COMPONENTES ***
         public int DevedorID { get; set; }
+        public string DevedoresID { get; set; }
         public string NomeDevedor { get; set; }
         public string EmailDevedor { get; set; }
         public string CPFDevedor { get; set; }
+        public string RGDevedor { get; set; }
         public string Contrato { get; set; }
-        public DateTime DataPagamento { get; set; }
+        public string DataPagamento { get; set; }
         public string ValorPrincipal { get; set; }
         public string ValorAtualizado { get; set; }
+
 
         public List<DevedoresModelView> ListaDevedores { get; set; }
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
@@ -43,37 +46,26 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("WITH resultado AS ");
                 sql.AppendLine("( ");
                 sql.AppendLine("SELECT ");
-                sql.AppendLine("DevedorID, ");
+                sql.AppendLine("DevedoresID, ");
                 sql.AppendLine("NomeDevedor, ");
                 sql.AppendLine("EmailDevedor, ");
                 sql.AppendLine("CPFDevedor, ");
-                sql.AppendLine("Contrato, ");
-                sql.AppendLine("DataPagamento, ");
-                sql.AppendLine("FORMAT(ValorPrincipal, 'C', 'pt-br' ) AS ValorPrincipal, ");
-                sql.AppendLine("FORMAT(ValorPrincipal, 'C', 'pt-br' ) AS ValorAtualizado, ");
-                sql.AppendLine("ROW_NUMBER() OVER (ORDER BY DevedorID) AS Linha ");
+                sql.AppendLine("RGDevedor, ");
+                sql.AppendLine("ROW_NUMBER() OVER (ORDER BY DevedoresID) AS Linha ");
                 sql.AppendLine("FROM ");
                 sql.AppendLine("Devedores");
                 sql.AppendLine("WHERE ");
                 sql.AppendLine(" 1 = 1 ");
                 
                 /*Filtros de pesquisa*/
-                if (!String.IsNullOrEmpty(DevedorID.ToString()))
-                    sql.AppendFormat(" AND DevedorID = '{0}'", DevedorID);
+                if (!String.IsNullOrEmpty(DevedoresID))
+                    sql.AppendFormat(" AND DevedoresID = '{0}'", DevedoresID);
                 if (!String.IsNullOrEmpty(NomeDevedor))
                     sql.AppendFormat(" AND UPPER(NomeDevedor) LIKE UPPER('%{0}%')", NomeDevedor);
                 if (!String.IsNullOrEmpty(EmailDevedor))
                     sql.AppendFormat(" AND UPPER(EmailDevedor) LIKE UPPER('%{0}%')", EmailDevedor);
                 if (!String.IsNullOrEmpty(CPFDevedor))
                     sql.AppendFormat(" AND UPPER(CPFDevedor) LIKE UPPER('%{0}%')", CPFDevedor);
-                if (!String.IsNullOrEmpty(Contrato))
-                    sql.AppendFormat(" AND Contrato = '{0}'", Contrato);
-                if (!String.IsNullOrEmpty(DataPagamento.ToString()))
-                    sql.AppendFormat(" AND DataPagamento = '{0}'", FormatarData("db", DataPagamento.ToString()));
-                if (!String.IsNullOrEmpty(ValorPrincipal))
-                    sql.AppendFormat(" AND ValorPrincipal = '{0}'", LimpaReaisDecimal(ValorPrincipal));
-                if (!String.IsNullOrEmpty(ValorAtualizado))
-                    sql.AppendFormat(" AND ValorAtualizado = '{0}'", LimpaReaisDecimal(ValorAtualizado));
                 /*Fim dos filtros*/
 
                 sql.AppendLine(")");
@@ -88,14 +80,12 @@ namespace EstruturaBoostratap.ModelViews
                 {
                     DevedoresModelView dados = new DevedoresModelView
                     {
-                        DevedorID = item.DevedorID,
+                        DevedorID = Convert.ToInt32(item.DevedoresID),
+                        DevedoresID = item.DevedoresID,
                         NomeDevedor = item.NomeDevedor,
                         EmailDevedor = item.EmailDevedor,
                         CPFDevedor = item.CPFDevedor,
-                        Contrato = item.Contrato,
-                        DataPagamento = item.DataPagamento,
-                        ValorPrincipal = item.ValorPrincipal,
-                        ValorAtualizado = item.ValorAtualizado
+                        RGDevedor = item.RGDevedor
                     };
 
                     ListasDevedores.Add(dados);
@@ -117,34 +107,140 @@ namespace EstruturaBoostratap.ModelViews
             {
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("SELECT ");
-                sql.AppendLine("COUNT(DevedorID) AS QTDRegistros");
+                sql.AppendLine("COUNT(DevedoresID) AS QTDRegistros");
                 sql.AppendLine("FROM ");
                 sql.AppendLine("Devedores");
                 sql.AppendLine("WHERE ");
                 sql.AppendLine(" 1 = 1 ");
 
                 /*Filtros de pesquisa*/
-                if (!String.IsNullOrEmpty(DevedorID.ToString()))
-                    sql.AppendFormat(" AND DevedorID = '{0}'", DevedorID);
+                if (!String.IsNullOrEmpty(DevedoresID))
+                    sql.AppendFormat(" AND DevedoresID = '{0}'", DevedoresID);
                 if (!String.IsNullOrEmpty(NomeDevedor))
                     sql.AppendFormat(" AND UPPER(NomeDevedor) LIKE UPPER('%{0}%')", NomeDevedor);
                 if (!String.IsNullOrEmpty(EmailDevedor))
                     sql.AppendFormat(" AND UPPER(EmailDevedor) LIKE UPPER('%{0}%')", EmailDevedor);
                 if (!String.IsNullOrEmpty(CPFDevedor))
                     sql.AppendFormat(" AND UPPER(CPFDevedor) LIKE UPPER('%{0}%')", CPFDevedor);
-                if (!String.IsNullOrEmpty(Contrato))
-                    sql.AppendFormat(" AND Contrato = '{0}'", Contrato);
-                if (!String.IsNullOrEmpty(DataPagamento.ToString()))
-                    sql.AppendFormat(" AND DataPagamento = '{0}'", FormatarData("db", DataPagamento.ToString()));
-                if (!String.IsNullOrEmpty(ValorPrincipal))
-                    sql.AppendFormat(" AND ValorPrincipal = '{0}'", LimpaReaisDecimal(ValorPrincipal));
-                if (!String.IsNullOrEmpty(ValorAtualizado))
-                    sql.AppendFormat(" AND ValorAtualizado = '{0}'", LimpaReaisDecimal(ValorAtualizado));
                 /*Fim dos filtros*/
 
                 var Dados = conexao.Query<int>(sql.ToString());
 
                 QTDRegistros = Dados.First();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public List<TelefonesDevedores> GetListaTelefones(int id)
+        {
+
+            List<TelefonesDevedores> ListaTelefone = new List<TelefonesDevedores>();
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("TelefoneDevedorID, ");
+                sql.AppendLine("Telefone, ");
+                sql.AppendLine("Descricao ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("TelefonesDevedores");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedorID = {0} ", id);
+
+                var Dados = conexao.Query<TelefonesDevedores>(sql.ToString()).ToList();
+
+                foreach(var item in Dados)
+                {
+                    TelefonesDevedores dados = new TelefonesDevedores
+                    {
+                        TelefoneDevedorID = item.TelefoneDevedorID,
+                        Telefone = item.Telefone,
+                        Descricao = item.Descricao
+                    };
+
+                    ListaTelefone.Add(dados);
+                }
+
+                return ListaTelefone;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void DeleteDevedor(int id)
+        {
+            DeleteTelefone(id);
+            DeleteEndereco(id);
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("DELETE ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Devedor ");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedoresID = {0} ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void DeleteTelefone(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("DELETE ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("TelefonesDevedores ");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedorID = {0} ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void DeleteEndereco(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("DELETE ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("DevedoresEndereco ");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedorID = {0} ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
             }
             catch (Exception ex)
             {
@@ -177,7 +273,7 @@ namespace EstruturaBoostratap.ModelViews
         public int TelefoneDevedorID { get; set; }
         public int DevedorID { get; set; }
         public string Telefone { get; set; }
-        public string Celular { get; set; }
+        public string  Descricao { get; set; }
         #endregion
     }
 }

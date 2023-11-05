@@ -14,38 +14,10 @@
     @RenderSection("Styles", required: false)
     <link href="~/css/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body data-topbar="dark">
-    <div id="layout-wrapper">
-        <header id="page-topbar">
-            <div class="navbar-header">
-                <div class="d-flex">
-                    <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
-                        <i class="fa fa-fw fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
-        @await Component.InvokeAsync("Menu")
-        <div class="main-content">
-            <div class="page-content">
-                <div class="container-fluid">
-                    @RenderBody()
-                </div>
-            </div>
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p class="direitos-autorais">Copyright &copy; @DateTime.Now.Year - Todos os Direitos Reservados</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p class="versao">Versão - 1.0.0.0</p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
+<body>
+    <main>
+        @RenderBody()
+    </main>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/metisMenu.min.js"></script>

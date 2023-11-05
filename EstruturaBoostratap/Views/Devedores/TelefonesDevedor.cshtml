@@ -1,0 +1,37 @@
+﻿@model EstruturaBoostratap.ModelViews.DevedoresModelView
+
+@{
+    Layout = "~/Views/Shared/_Modal.cshtml";
+}
+
+@section Styles {}
+@section Scripts {}
+
+<h1 class="titulo-pagina">Telefones</h1>
+<div class="clear-titulo"></div>
+<table class="table table-striped table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Telefone</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ListaTelefoneDevedores.Count > 0)
+        {
+            @foreach (var item in Model.ListaTelefoneDevedores)
+            {
+                <tr>
+                    <td>@item.Telefone</td>
+                    <td>@item.Descricao</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">Nenhum registro encontrado!</td>
+            </tr>
+        }
+    </tbody>
+</table>

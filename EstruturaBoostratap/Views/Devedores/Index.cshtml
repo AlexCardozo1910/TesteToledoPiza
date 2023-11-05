@@ -4,11 +4,13 @@
 }
 
 @section Styles {
+    <link href="/lib/fancybox/jquery.fancybox.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
 }
 @section Scripts {
+    <script src="/lib/fancybox/jquery.fancybox.js"></script>
     <script src="~/js/moment.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.datepicker.js"></script>
     <script src="~/js/jquery.maskedinput-1.3.min.js"></script>
@@ -16,6 +18,9 @@
 
 <h1 class="titulo-pagina">Devedores</h1>
 <div class="clear-titulo"></div>
+
+@await Component.InvokeAsync("Alertas")
+
 <div class="top-pagina">
     <form name="FormCleanFilter" id="FormCleanFilter" asp-action="Index">
         <input type="hidden" name="LimparBusca" value="LimparFiltro" />
@@ -68,29 +73,41 @@
         </div>
     </form>
     <div class="grid-result">
-        <table class="table table-hover">
+        <table class="table table-striped table-hover">
             <thead class="table-light">
                 <tr>
                     <th scope="col"><input type="checkbox" name="seleciona-tudo" id="seleciona-tudo" /></th>
                     <th scope="col">Nome Devedor</th>
                     <th scope="col">E-mail</th>
                     <th scope="col">CPF</th>
-                    <th scope="col">Contrato</th>
-                    <th scope="col">Data de Pagamento</th>
+                    <th scope="col">Telefones</th>
+                    <th scope="col">Contratos</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.ListaDevedores)
+                @if (Model.ListaDevedores.Count > 0)
+                {
+                    @foreach (var item in Model.ListaDevedores)
+                    {
+                        <tr>
+                            <th scope="row"><input type="checkbox" name="ch_@item.DevedorID" id="ch_@item.DevedorID" value="@item.DevedorID" /></th>
+                            <td>@item.NomeDevedor</td>
+                            <td>@item.EmailDevedor</td>
+                            <td>@item.CPFDevedor</td>
+                            <td><a data-fancybox-type="iframe" class="btn btn-light fancyboxIframe" asp-action="TelefonesDevedor" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">tty</i></a></td>
+                            <td></td>
+                            <td>
+                                <a class="btn btn-success" role="button" asp-action="Edit" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">edit</i></a>
+                                <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">delete</i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <th scope="row"><input type="checkbox" name="ch_@item.DevedorID" id="ch_@item.DevedorID" value="@item.DevedorID" /></th>
-                        <td>@item.NomeDevedor</td>
-                        <td>@item.EmailDevedor</td>
-                        <td>@item.CPFDevedor</td>
-                        <td>@item.Contrato</td>
-                        <td>@item.DataPagamento</td>
-                        <td><a class="btn btn-success" asp-action="Edit" asp-route-id="@item.DevedorID" role="button">Editar Cliente</a></td>
+                        <td colspan="7">Nenhum registro encontrado!</td>
                     </tr>
                 }
             </tbody>
