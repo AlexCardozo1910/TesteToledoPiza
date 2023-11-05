@@ -117,7 +117,7 @@ namespace EstruturaBoostratap.ModelViews
             {
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("SELECT ");
-                sql.AppendLine("DevedorID AS QTDRegistros");
+                sql.AppendLine("COUNT(DevedorID) AS QTDRegistros");
                 sql.AppendLine("FROM ");
                 sql.AppendLine("Devedores");
                 sql.AppendLine("WHERE ");
