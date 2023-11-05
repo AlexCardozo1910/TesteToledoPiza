@@ -1,0 +1,100 @@
+﻿@model EstruturaBoostratap.ModelViews.DevedoresModelView
+@{
+    ViewData["Title"] = "Lista de Devedores";
+}
+
+@section Styles {
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/js/moment.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.datepicker.js"></script>
+    <script src="~/js/jquery.maskedinput-1.3.min.js"></script>
+}
+
+<h1 class="titulo-pagina">Devedores</h1>
+<div class="clear-titulo"></div>
+<div class="top-pagina">
+    <form name="FormCleanFilter" id="FormCleanFilter" asp-action="Index">
+        <input type="hidden" name="LimparBusca" value="LimparFiltro" />
+    </form>
+    <form asp-action="Index">
+        <div class="menu-listar">
+            <div class="btn-filtrar">
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Filtrar</button>
+            </div>
+            <div class="btn-novo">
+                <a class="btn btn-primary" asp-action="Create" role="button">
+                    Novo Cliente
+                </a>
+            </div>
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col">
+                    <div class="collapse multi-collapse" id="multiCollapseExample2">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label for="NomeCliente">Nome do Devedor/Razão Social</label>
+                                    @Html.TextBoxFor(x => x.NomeDevedor, new { @id = "NomeDevedor", @class = "form-control", @placeholder = "Nome ou Razão Social do Cliente" })
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="EmailCliente">E-mail</label>
+                                    @Html.TextBoxFor(x => x.EmailDevedor, new { @id = "EmailDevedor", @class = "form-control", @placeholder = "E-mail" })
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <label for="CPFDevedor">CPF</label>
+                                    @Html.TextBoxFor(x => x.CPFDevedor, new { @id = "CPFDevedor", @class = "form-control maskCPF", @placeholder = "CPF" })
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <label for="Contrato">Contrato</label>
+                                    @Html.TextBoxFor(x => x.Contrato, new { @id = "Contrato", @class = "form-control", @placeholder = "Contrato" })
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <label for="DataPagamento">Data de Pagamento</label>
+                                    @Html.TextBoxFor(x => x.DataPagamento, new { @id = "Contrato", @class = "form-control dataPicker", @placeholder = "DataPagamento" })
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                                <a href="#" class="btn btn-danger" onclick="javascript:document.FormCleanFilter.submit();" role="button">Limpar Filtros</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="grid-result">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col"><input type="checkbox" name="seleciona-tudo" id="seleciona-tudo" /></th>
+                    <th scope="col">Nome Devedor</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">Contrato</th>
+                    <th scope="col">Data de Pagamento</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ListaDevedores)
+                {
+                    <tr>
+                        <th scope="row"><input type="checkbox" name="ch_@item.DevedorID" id="ch_@item.DevedorID" value="@item.DevedorID" /></th>
+                        <td>@item.NomeDevedor</td>
+                        <td>@item.EmailDevedor</td>
+                        <td>@item.CPFDevedor</td>
+                        <td>@item.Contrato</td>
+                        <td>@item.DataPagamento</td>
+                        <td><a class="btn btn-success" asp-action="Edit" asp-route-id="@item.DevedorID" role="button">Editar Cliente</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @await Component.InvokeAsync("Paginacao")
+    </div>
+</div>

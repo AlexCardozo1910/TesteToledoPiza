@@ -1,0 +1,65 @@
+﻿@if (!String.IsNullOrEmpty(Model.MensagemInfo))
+{
+    <div class="alert card blue lighten-4 blue-text text-darken-3">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">info</i><span>Informamos:</span> @Model.MensagemInfo</p>
+        </div>
+    </div>
+}
+@if (!String.IsNullOrEmpty(Model.MensagemReport))
+{
+    <div class="alert card amber lighten-4 brown-text">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">report_problem</i><span>Erro de Sistema:</span> @Model.MensagemReport</p>
+        </div>
+    </div>
+}
+@if (!String.IsNullOrEmpty(Model.MensagemErro))
+{
+    <div class="alert card red lighten-4 red-text text-darken-4">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">report</i><span>Ops:</span> @Model.MensagemErro</p>
+        </div>
+    </div>
+}
+@if (!String.IsNullOrEmpty(Model.MensagemOk))
+{
+    <div class="alert card green lighten-4 green-text text-darken-4">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">check_circle</i><span>Sucesso:</span> @Model.MensagemOk</p>
+        </div>
+    </div>
+}
+
+@if (Model.Tipo == 1)
+{
+    <div class="alert card blue lighten-4 blue-text text-darken-3">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">info</i><span>Informamos:</span> @Model.Mensagem</p>
+        </div>
+    </div>
+}
+@if (Model.Tipo == 2)
+{
+    <div class="alert card amber lighten-4 brown-text">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">report_problem</i><span>Erro de Sistema:</span> @Model.Mensagem</p>
+        </div>
+    </div>
+}
+@if (Model.Tipo == 3)
+{
+    <div class="alert card red lighten-4 red-text text-darken-4">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">report</i><span>Ops:</span> @Model.Mensagem</p>
+        </div>
+    </div>
+}
+@if (Model.Tipo == 4)
+{
+    <div class="alert card green lighten-4 green-text text-darken-4">
+        <div class="card-content">
+            <p><i class="material-symbols-outlined">check_circle</i><span>Sucesso:</span> @Model.Mensagem</p>
+        </div>
+    </div>
+}

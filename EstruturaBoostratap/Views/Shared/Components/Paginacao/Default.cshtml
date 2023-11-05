@@ -1,0 +1,37 @@
+﻿<div class="clear-titulo"></div>
+<div class="final-pages">
+    <div class="row">
+        <div class="col-1">
+            <div class="qtd-registro">@Model.QTDRegistros Registros</div>
+        </div>
+        @{
+            var Resto = Model.QTDRegistros % Model.RPP;
+            var TotalPaginas = (Resto > 0) ? ((Model.QTDRegistros - Resto) / Model.RPP) + 1 : Model.QTDRegistros / Model.RPP;
+        }
+        @if (TotalPaginas > 1)
+        {
+            <div class="col-9">
+                <nav aria-label="Navegação de página exemplo">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(Model.PageAtual - 1)" aria-label="Anterior">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Anterior</span>
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= TotalPaginas; i++)
+                        {
+                            <li class="page-item"><a class="page-link @(Model.PageAtual == i ? "pg-ativa" : "")" href="?page=@i">@i</a></li>
+                        }
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(Model.PageAtual + 1)" aria-label="Próximo">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Próximo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
