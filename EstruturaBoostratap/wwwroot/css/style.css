@@ -69,7 +69,9 @@ span {
 .fRight {
     float: right
 }
-
+.margin-final{
+    margin-bottom: 20px;
+}
 .wrapper {
     display: flex;
     align-items: stretch;
