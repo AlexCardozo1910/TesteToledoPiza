@@ -41,9 +41,13 @@
                     <div class="collapse multi-collapse" id="multiCollapseExample2">
                         <div class="card card-body">
                             <div class="row">
+                                <div class="col-md-2 mb-2">
+                                    <label for="DevedoresID">Código</label>
+                                    @Html.TextBoxFor(x => x.DevedoresID, new { @id = "DevedoresID", @class = "form-control", @placeholder = "Código do Devedor" })
+                                </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="NomeCliente">Nome do Devedor/Razão Social</label>
-                                    @Html.TextBoxFor(x => x.NomeDevedor, new { @id = "NomeDevedor", @class = "form-control", @placeholder = "Nome ou Razão Social do Cliente" })
+                                    <label for="NomeDevedor">Nome do Devedor</label>
+                                    @Html.TextBoxFor(x => x.NomeDevedor, new { @id = "NomeDevedor", @class = "form-control", @placeholder = "Nome do Devedor" })
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label for="EmailCliente">E-mail</label>
@@ -54,12 +58,8 @@
                                     @Html.TextBoxFor(x => x.CPFDevedor, new { @id = "CPFDevedor", @class = "form-control maskCPF", @placeholder = "CPF" })
                                 </div>
                                 <div class="col-md-2 mb-2">
-                                    <label for="Contrato">Contrato</label>
-                                    @Html.TextBoxFor(x => x.Contrato, new { @id = "Contrato", @class = "form-control", @placeholder = "Contrato" })
-                                </div>
-                                <div class="col-md-2 mb-2">
-                                    <label for="DataPagamento">Data de Pagamento</label>
-                                    @Html.TextBoxFor(x => x.DataPagamento, new { @id = "Contrato", @class = "form-control dataPicker", @placeholder = "DataPagamento" })
+                                    <label for="RGDevedor">RG</label>
+                                    @Html.TextBoxFor(x => x.RGDevedor, new { @id = "RGDevedor", @class = "form-control maskRG", @placeholder = "RG" })
                                 </div>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -76,10 +76,11 @@
         <table class="table table-striped table-hover">
             <thead class="table-light">
                 <tr>
-                    <th scope="col"><input type="checkbox" name="seleciona-tudo" id="seleciona-tudo" /></th>
+                    <th scope="col">Código</th>
                     <th scope="col">Nome Devedor</th>
                     <th scope="col">E-mail</th>
                     <th scope="col">CPF</th>
+                    <th scope="col">RG</th>
                     <th scope="col">Telefones</th>
                     <th scope="col">Contratos</th>
                     <th scope="col">Ações</th>
@@ -91,10 +92,11 @@
                     @foreach (var item in Model.ListaDevedores)
                     {
                         <tr>
-                            <th scope="row"><input type="checkbox" name="ch_@item.DevedorID" id="ch_@item.DevedorID" value="@item.DevedorID" /></th>
+                            <td>@item.DevedorID</td>
                             <td>@item.NomeDevedor</td>
                             <td>@item.EmailDevedor</td>
                             <td>@item.CPFDevedor</td>
+                            <td>@item.RGDevedor</td>
                             <td><a data-fancybox-type="iframe" class="btn btn-light fancyboxIframe" asp-action="TelefonesDevedor" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">tty</i></a></td>
                             <td></td>
                             <td>
@@ -107,7 +109,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="7">Nenhum registro encontrado!</td>
+                        <td colspan="8">Nenhum registro encontrado!</td>
                     </tr>
                 }
             </tbody>

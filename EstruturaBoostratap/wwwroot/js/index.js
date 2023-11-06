@@ -23,6 +23,9 @@ $(document).ready(function () {
     if ($(".maskInscricao").length)
         $(".maskInscricao").mask("999.999.999.999")
 
+    if ($(".maskRG").length)
+        $(".maskRG").mask("99.999.999-9")
+
     if ($(".maskCPF").length)
         $(".maskCPF").mask("999.999.999-99")
 

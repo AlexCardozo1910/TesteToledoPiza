@@ -34,7 +34,7 @@ namespace EstruturaBoostratap.Controllers
             DevedoresModelView dados = new DevedoresModelView
             {
                 PageAtual = page == 0 ? 1 : page,
-                DevedorID = Convert.ToInt32(collection["DevedorID"]),
+                DevedoresID = collection["DevedoresID"],
                 NomeDevedor = collection["NomeDevedor"],
                 EmailDevedor = collection["EmailDevedor"],
                 CPFDevedor =  collection["CPFDevedor"],

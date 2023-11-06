@@ -19,10 +19,6 @@ namespace EstruturaBoostratap.ModelViews
         public string EmailDevedor { get; set; }
         public string CPFDevedor { get; set; }
         public string RGDevedor { get; set; }
-        public string Contrato { get; set; }
-        public string DataPagamento { get; set; }
-        public string ValorPrincipal { get; set; }
-        public string ValorAtualizado { get; set; }
         public string Cep { get; set; }
         public string Endereco { get; set; }
         public string Numero { get; set; }
@@ -74,6 +70,8 @@ namespace EstruturaBoostratap.ModelViews
                     sql.AppendFormat(" AND UPPER(EmailDevedor) LIKE UPPER('%{0}%')", EmailDevedor);
                 if (!String.IsNullOrEmpty(CPFDevedor))
                     sql.AppendFormat(" AND UPPER(CPFDevedor) LIKE UPPER('%{0}%')", CPFDevedor);
+                if (!String.IsNullOrEmpty(RGDevedor))
+                    sql.AppendFormat(" AND UPPER(RGDevedor) LIKE UPPER('%{0}%')", RGDevedor);
                 /*Fim dos filtros*/
 
                 sql.AppendLine(")");
@@ -130,6 +128,8 @@ namespace EstruturaBoostratap.ModelViews
                     sql.AppendFormat(" AND UPPER(EmailDevedor) LIKE UPPER('%{0}%')", EmailDevedor);
                 if (!String.IsNullOrEmpty(CPFDevedor))
                     sql.AppendFormat(" AND UPPER(CPFDevedor) LIKE UPPER('%{0}%')", CPFDevedor);
+                if (!String.IsNullOrEmpty(RGDevedor))
+                    sql.AppendFormat(" AND UPPER(RGDevedor) LIKE UPPER('%{0}%')", RGDevedor);
                 /*Fim dos filtros*/
 
                 var Dados = conexao.Query<int>(sql.ToString());
@@ -492,7 +492,7 @@ namespace EstruturaBoostratap.ModelViews
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("DELETE ");
                 sql.AppendLine("FROM ");
-                sql.AppendLine("Devedor ");
+                sql.AppendLine("Devedores ");
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("DevedoresID = {0} ", id);
 
