@@ -254,7 +254,7 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
-        public bool VerificaCPF(string CPF)
+        public bool VerificaCPF(string CPF, int id)
         {
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
@@ -267,6 +267,11 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("Devedores");
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("CPFDevedor = '{0}' ", CPF);
+                if(id > 0)
+                {
+                    sql.AppendLine("AND ");
+                    sql.AppendFormat("DevedoresID != '{0}' ", id);
+                }
 
                 var Dados = conexao.Query<int>(sql.ToString());
 

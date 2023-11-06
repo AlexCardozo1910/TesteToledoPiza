@@ -83,7 +83,7 @@ namespace EstruturaBoostratap.Controllers
 
             try
             {
-                if (dados.VerificaCPF(dados.CPFDevedor))
+                if (dados.VerificaCPF(dados.CPFDevedor, 0))
                 {
                     dados.MensagemInfo = "CPF já cadastrado!";
                     return View(dados);
@@ -147,6 +147,13 @@ namespace EstruturaBoostratap.Controllers
 
             try
             {
+
+                if (dados.VerificaCPF(dados.CPFDevedor, id))
+                {
+                    dados.MensagemInfo = "CPF cadastrado em outro devedor!";
+                    return View(dados);
+                }
+
                 dados.AlterarInfo(id);
 
                 foreach(var item in dados.GetListaTelefones(id))
