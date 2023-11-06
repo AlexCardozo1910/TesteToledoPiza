@@ -389,6 +389,7 @@ namespace EstruturaBoostratap.ModelViews
                 Cep = Dados.Cep;
                 Endereco = Dados.Endereco;
                 Numero = Dados.Numero;
+                Bairro = Dados.Bairro;
                 Cidade = Dados.Cidade;
                 Estado = Dados.Estado;
                 IBGE = Dados.IBGE;
