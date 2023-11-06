@@ -23,6 +23,14 @@ namespace EstruturaBoostratap.ModelViews
         public string DataPagamento { get; set; }
         public string ValorPrincipal { get; set; }
         public string ValorAtualizado { get; set; }
+        public string Cep { get; set; }
+        public string Endereco { get; set; }
+        public string Numero { get; set; }
+        public string Bairro { get; set; }
+        public string Cidade { get; set; }
+        public string Estado { get; set; }
+        public string IBGE { get; set; }
+        public string Complemento { get; set; }
 
 
         public List<DevedoresModelView> ListaDevedores { get; set; }
@@ -134,6 +142,145 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
+        public int Inserir()
+        {
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO ");
+                sql.AppendLine("Devedores");
+                sql.AppendLine("( ");
+                sql.AppendLine("NomeDevedor, ");
+                sql.AppendLine("EmailDevedor, ");
+                sql.AppendLine("CPFDevedor, ");
+                sql.AppendLine("RGDevedor ");
+                sql.AppendLine(") ");
+                sql.AppendLine("VALUES ");
+                sql.AppendLine("( ");
+                sql.AppendFormat("'{0}', ", NomeDevedor);
+                sql.AppendFormat("'{0}', ", EmailDevedor);
+                sql.AppendFormat("'{0}', ", CPFDevedor);
+                sql.AppendFormat("'{0}' ", RGDevedor);
+                sql.AppendLine("); SELECT CAST(scope_identity() AS INT) ");
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                int Codigo = Convert.ToInt32(comando.ExecuteScalar());
+
+                return Codigo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void InserirTelefone(int id, string Telefone, string Descricao)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO ");
+                sql.AppendLine("TelefonesDevedores");
+                sql.AppendLine("( ");
+                sql.AppendLine("DevedorID, ");
+                sql.AppendLine("Telefone, ");
+                sql.AppendLine("Descricao ");
+                sql.AppendLine(") ");
+                sql.AppendLine("VALUES ");
+                sql.AppendLine("( ");
+                sql.AppendFormat("'{0}', ", id);
+                sql.AppendFormat("'{0}', ", Telefone);
+                sql.AppendFormat("'{0}' ", Descricao);
+                sql.AppendLine(");");
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void InserirEndereco(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO ");
+                sql.AppendLine("DevedoresEndereco");
+                sql.AppendLine("( ");
+                sql.AppendLine("DevedorID, ");
+                sql.AppendLine("Cep, ");
+                sql.AppendLine("Endereco, ");
+                sql.AppendLine("Numero, ");
+                sql.AppendLine("Bairro, ");
+                sql.AppendLine("Cidade, ");
+                sql.AppendLine("Estado, ");
+                sql.AppendLine("IBGE, ");
+                sql.AppendLine("Complemento ");
+                sql.AppendLine(") ");
+                sql.AppendLine("VALUES ");
+                sql.AppendLine("( ");
+                sql.AppendFormat("'{0}', ", id);
+                sql.AppendFormat("'{0}', ", Cep);
+                sql.AppendFormat("'{0}', ", Endereco);
+                sql.AppendFormat("'{0}', ", Numero);
+                sql.AppendFormat("'{0}', ", Bairro);
+                sql.AppendFormat("'{0}', ", Cidade);
+                sql.AppendFormat("'{0}', ", Estado);
+                sql.AppendFormat("'{0}', ", IBGE);
+                sql.AppendFormat("'{0}' ", Complemento);
+                sql.AppendLine(");");
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public bool VerificaCPF(string CPF)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("COUNT(DevedoresID) AS QTDRegistros");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Devedores");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("CPFDevedor = '{0}' ", CPF);
+
+                var Dados = conexao.Query<int>(sql.ToString());
+
+                if (Dados.First() > 0)
+                    return true;
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public List<TelefonesDevedores> GetListaTelefones(int id)
         {
 
@@ -176,10 +323,167 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
+        public void GetInfo(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("DevedoresID, ");
+                sql.AppendLine("NomeDevedor, ");
+                sql.AppendLine("EmailDevedor, ");
+                sql.AppendLine("CPFDevedor, ");
+                sql.AppendLine("RGDevedor ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Devedores");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedoresID = {0} ", id);
+
+                var Dados = conexao.Query<DevedoresModelView>(sql.ToString()).SingleOrDefault();
+
+                DevedoresID = Dados.DevedoresID;
+                NomeDevedor = Dados.NomeDevedor;
+                EmailDevedor = Dados.EmailDevedor;
+                CPFDevedor = Dados.CPFDevedor;
+                RGDevedor = Dados.RGDevedor;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void GetEndereco(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("Cep, ");
+                sql.AppendLine("Endereco, ");
+                sql.AppendLine("Numero, ");
+                sql.AppendLine("Bairro, ");
+                sql.AppendLine("Cidade, ");
+                sql.AppendLine("Estado, ");
+                sql.AppendLine("IBGE, ");
+                sql.AppendLine("Complemento ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("DevedoresEndereco");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedorID = {0} ", id);
+
+                var Dados = conexao.Query<DevedoresEndereco>(sql.ToString()).SingleOrDefault();
+
+                Cep = Dados.Cep;
+                Endereco = Dados.Endereco;
+                Numero = Dados.Numero;
+                Cidade = Dados.Cidade;
+                Estado = Dados.Estado;
+                IBGE = Dados.IBGE;
+                Complemento = Dados.Complemento;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void AlterarInfo(int id)
+        {
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("UPDATE ");
+                sql.AppendLine("Devedores ");
+                sql.AppendLine("SET ");
+                sql.AppendFormat("NomeDevedor = '{0}', ", NomeDevedor);
+                sql.AppendFormat("EmailDevedor = '{0}', ", EmailDevedor);
+                sql.AppendFormat("CPFDevedor = '{0}', ", CPFDevedor);
+                sql.AppendFormat("RGDevedor = '{0}' ", RGDevedor);
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedoresID = '{0}' ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void AlterarEnderecos(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("UPDATE ");
+                sql.AppendLine("DevedoresEndereco ");
+                sql.AppendLine("SET ");
+                sql.AppendFormat("Cep = '{0}', ", Cep);
+                sql.AppendFormat("Endereco = '{0}', ", Endereco);
+                sql.AppendFormat("Numero = '{0}', ", Numero);
+                sql.AppendFormat("Bairro = '{0}', ", Bairro);
+                sql.AppendFormat("Cidade = '{0}', ", Cidade);
+                sql.AppendFormat("Estado = '{0}', ", Estado);
+                sql.AppendFormat("IBGE = '{0}', ", IBGE);
+                sql.AppendFormat("Complemento = '{0}' ", Complemento);
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("DevedorID = '{0}' ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void AlterarTelefones(int id, string Telefone, string Descricao)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("UPDATE ");
+                sql.AppendLine("TelefonesDevedores ");
+                sql.AppendLine("SET ");
+                sql.AppendFormat("Telefone = '{0}', ", Telefone);
+                sql.AppendFormat("Descricao = '{0}' ", Descricao);
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("TelefoneDevedorID = '{0}' ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public void DeleteDevedor(int id)
         {
-            DeleteTelefone(id);
-            DeleteEndereco(id);
+            DeleteTelefones(id);
+            DeleteEnderecos(id);
 
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
@@ -213,6 +517,29 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("FROM ");
                 sql.AppendLine("TelefonesDevedores ");
                 sql.AppendLine("WHERE ");
+                sql.AppendFormat("TelefoneDevedorID = {0} ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void DeleteTelefones(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("DELETE ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("TelefonesDevedores ");
+                sql.AppendLine("WHERE ");
                 sql.AppendFormat("DevedorID = {0} ", id);
 
                 SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
@@ -225,7 +552,7 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
-        public void DeleteEndereco(int id)
+        public void DeleteEnderecos(int id)
         {
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
@@ -264,6 +591,7 @@ namespace EstruturaBoostratap.ModelViews
         public string Cidade { get; set; }
         public string Estado { get; set; }
         public string IBGE { get; set; }
+        public string Complemento { get; set; }
         #endregion
     }
 
