@@ -18,6 +18,12 @@ namespace EstruturaBoostratap.Data.Commun
 		public string MensagemErro { get; set; }
 		public bool DadosAlterados { get; set; }
 
+		public class RetornosJson
+        {
+			public string DataAtual { get; set; }
+			public string Descricao { get; set; }
+        }
+
 		public class NomeMeses
 		{
 			public int CodigoMeses { get; set; }
@@ -99,6 +105,17 @@ namespace EstruturaBoostratap.Data.Commun
 			};
 
 			return dados;
+		}
+
+		public string LimpaReais(string valor)
+		{
+			if (String.IsNullOrEmpty(valor))
+				return "0.00";
+
+			var limpa_real = valor.Replace("R$", "");
+			var final = limpa_real.Replace(".", "");
+
+			return final;
 		}
 
 		public string LimpaReaisDecimal(string valor)

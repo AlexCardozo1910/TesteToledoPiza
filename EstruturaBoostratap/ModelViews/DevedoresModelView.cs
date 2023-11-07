@@ -32,6 +32,7 @@ namespace EstruturaBoostratap.ModelViews
         public List<DevedoresModelView> ListaDevedores { get; set; }
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
         public List<TelefonesDevedores> ListaTelefoneDevedores { get; set; }
+        public List<Contratos> ListaContratos { get; set; }
         #endregion
 
         #region *** METODOS ***
@@ -176,6 +177,168 @@ namespace EstruturaBoostratap.ModelViews
             {
                 throw new Exception(ex.Message, ex);
             }
+        }
+
+        public int GravaContrato(int id, int NumeroContrato)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO ");
+                sql.AppendLine("Contratos");
+                sql.AppendLine("( ");
+                sql.AppendLine("IDDevedor, ");
+                sql.AppendLine("NumeroContrato, ");
+                sql.AppendLine("DataInclusao ");
+                sql.AppendLine(") ");
+                sql.AppendLine("VALUES ");
+                sql.AppendLine("( ");
+                sql.AppendFormat("'{0}', ", id);
+                sql.AppendFormat("'{0}', ", NumeroContrato);
+                sql.AppendLine("CAST(GETDATE() AS DATE) ");
+                sql.AppendLine("); SELECT CAST(scope_identity() AS INT) ");
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                int Codigo = Convert.ToInt32(comando.ExecuteScalar());
+
+                return Codigo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
+        }
+
+        public void GravarParcelas(int ContratoID, int NumeroParcela, decimal ValorParcela, DateTime DataVencimento)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("( ");
+                sql.AppendLine("IDContrato, ");
+                sql.AppendLine("NumeroParcela, ");
+                sql.AppendLine("ValorParcela, ");
+                sql.AppendLine("DataVencimento, ");
+                sql.AppendLine("Status ");
+                sql.AppendLine(") ");
+                sql.AppendLine("VALUES ");
+                sql.AppendLine("( ");
+                sql.AppendFormat("'{0}', ", ContratoID);
+                sql.AppendFormat("'{0}', ", NumeroParcela);
+                sql.AppendFormat("'{0}', ", LimpaReaisDecimal(ValorParcela.ToString()));
+                sql.AppendFormat("'{0}', ", DataVencimento);
+                sql.AppendFormat("'{0}' ", 'A');
+                sql.AppendLine(");");
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public List<Contratos> GetListaContrato(int id)
+        {
+
+            List<Contratos> ListasContratos = new List<Contratos>();
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("IDContrato, ");
+                sql.AppendLine("NumeroContrato, ");
+                sql.AppendLine("DataInclusao ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Contratos");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDDevedor = {0} ", id);
+
+                var Dados = conexao.Query<Contratos>(sql.ToString()).ToList();
+
+                foreach (var item in Dados)
+                {
+                    Contratos dados = new Contratos
+                    {
+                        IDContrato = item.IDContrato,
+                        IDDevedor = item.IDDevedor,
+                        NumeroContrato = item.NumeroContrato,
+                        DataInclusao = item.DataInclusao,
+                        ListaParcelas = GetListaParcelas(item.IDContrato)
+                    };
+
+                    ListasContratos.Add(dados);
+                }
+
+                return ListasContratos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public List<Parcelas> GetListaParcelas(int ContratoID)
+        {
+
+            List<Parcelas> ListasParcelas = new List<Parcelas>();
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("IDParcela, ");
+                sql.AppendLine("NumeroParcela, ");
+                sql.AppendLine("FORMAT(ValorParcela, 'C', 'pt-BR') AS ValorParcela, ");
+                sql.AppendLine("CAST(DataVencimento AS DATE) AS DataVencimento, ");
+                sql.AppendLine("CAST(DataPagamento AS DATE) AS DataPagamento, ");
+                sql.AppendLine("CASE WHEN Status = 'A' THEN 'Parcela Aberta' ELSE 'Parcela Paga' END AS Status ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDContrato = {0} ", ContratoID);
+
+                var Dados = conexao.Query<Parcelas>(sql.ToString()).ToList();
+
+                foreach (var item in Dados)
+                {
+                    Parcelas dados = new Parcelas
+                    {
+                        IDParcela = item.IDParcela,
+                        NumeroParcela = item.NumeroParcela,
+                        ValorParcela = item.ValorParcela,
+                        DataVencimento = FormatarData("user3", item.DataVencimento),
+                        DataPagamento = FormatarData("user3", item.DataPagamento),
+                        Status = item.Status
+                    };
+
+                    ListasParcelas.Add(dados);
+                }
+
+                return ListasParcelas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
         }
 
         public void InserirTelefone(int id, string Telefone, string Descricao)
@@ -350,6 +513,7 @@ namespace EstruturaBoostratap.ModelViews
                 var Dados = conexao.Query<DevedoresModelView>(sql.ToString()).SingleOrDefault();
 
                 DevedoresID = Dados.DevedoresID;
+                DevedorID = Convert.ToInt32(Dados.DevedoresID);
                 NomeDevedor = Dados.NomeDevedor;
                 EmailDevedor = Dados.EmailDevedor;
                 CPFDevedor = Dados.CPFDevedor;
@@ -419,6 +583,31 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendFormat("RGDevedor = '{0}' ", RGDevedor);
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("DevedoresID = '{0}' ", id);
+
+                SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
+                conexao.Open();
+                comando.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void RealizaPagamento(int id)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("UPDATE ");
+                sql.AppendLine("Parcelas ");
+                sql.AppendLine("SET ");
+                sql.AppendLine("DataPagamento = CAST(GETDATE() AS DATE), ");
+                sql.AppendLine("Status = 'P' ");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDParcela = '{0}' ", id);
 
                 SqlCommand comando = new SqlCommand(sql.ToString(), conexao);
                 conexao.Open();
@@ -608,6 +797,31 @@ namespace EstruturaBoostratap.ModelViews
         public int DevedorID { get; set; }
         public string Telefone { get; set; }
         public string  Descricao { get; set; }
+        #endregion
+    }
+
+    public class Contratos
+    {
+        #region *** COMPONENTES ***
+        public int IDContrato { get; set; }
+        public int IDDevedor { get; set; }
+        public string NumeroContrato { get; set; }
+        public DateTime DataInclusao { get; set; }
+
+        public List<Parcelas> ListaParcelas { get; set; }
+        #endregion
+    }
+
+    public class Parcelas
+    {
+        #region *** COMPONENTES ***
+        public int IDParcela { get; set; }
+        public int IDContrato { get; set; }
+        public int NumeroParcela { get; set; }
+        public string ValorParcela { get; set; }
+        public string DataVencimento { get; set; }
+        public string DataPagamento { get; set; }
+        public string Status { get; set; }
         #endregion
     }
 }

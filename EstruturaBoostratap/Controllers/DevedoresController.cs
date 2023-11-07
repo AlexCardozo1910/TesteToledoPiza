@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static EstruturaBoostratap.Data.Commun.OptionServices;
 
 namespace EstruturaBoostratap.Controllers
 {
@@ -119,8 +120,9 @@ namespace EstruturaBoostratap.Controllers
             };
 
             dados.GetInfo(id);
-            dados.ListaTelefoneDevedores = dados.GetListaTelefones(id);
             dados.GetEndereco(id);
+            dados.ListaTelefoneDevedores = dados.GetListaTelefones(id);
+            dados.ListaContratos = dados.GetListaContrato(id);
 
             return View(dados);
         }
@@ -174,8 +176,9 @@ namespace EstruturaBoostratap.Controllers
                 dados.MensagemOk = "Ação executada!";
 
                 dados.GetInfo(id);
-                dados.ListaTelefoneDevedores = dados.GetListaTelefones(id);
                 dados.GetEndereco(id);
+                dados.ListaTelefoneDevedores = dados.GetListaTelefones(id);
+                dados.ListaContratos = dados.GetListaContrato(id);
 
                 return View(dados);
             }
@@ -183,7 +186,29 @@ namespace EstruturaBoostratap.Controllers
                 dados.MensagemReport = ex.Message;
                 return View(dados);
             }
+        }
 
+        public ActionResult PagamentoParcela(int id)
+        {
+            DevedoresModelView dados = new DevedoresModelView();
+
+            try
+            {
+                dados.RealizaPagamento(id);
+
+                RetornosJson json = new RetornosJson
+                {
+                    DataAtual = DateTime.Now.ToString("dd/MM/yyyy"),
+                    Descricao = "Parcela Paga"
+                };
+
+                return Json(json);
+            }
+            catch (Exception ex)
+            {
+                dados.MensagemReport = ex.Message;
+                return View(dados);
+            }
         }
 
         public ActionResult TelefonesDevedor(int id)
@@ -205,6 +230,34 @@ namespace EstruturaBoostratap.Controllers
                 dados.AlterarTelefones(id, telefone, descricao);
 
                 return Json(true);
+            }
+            catch (Exception ex)
+            {
+                dados.MensagemReport = ex.Message;
+                return View(dados);
+            }
+        }
+
+        public ActionResult CriarContrato(int id)
+        {
+
+            DevedoresModelView dados = new DevedoresModelView();
+
+            try
+            {
+
+                Random random = new Random();
+
+                int ContratoID = dados.GravaContrato(id, random.Next(785426, 987635));
+
+                DateTime hoje = DateTime.Now;
+                for (int i = 1; i <= 3; i++)
+                {
+                    DateTime DataParcela = hoje.AddMonths(i);
+                    dados.GravarParcelas(ContratoID, i, (decimal)random.NextDouble(), DataParcela);
+                }
+
+                return RedirectToAction("Edit", new { id = id, Mensagem = "Contrato gerado!", Tipo = 4 });
             }
             catch (Exception ex)
             {

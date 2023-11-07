@@ -121,7 +121,22 @@ $(document).ready(function () {
                 }
             }
         });
+    });
 
+    $(".btn-pagar").click(function () {
+        var Pagamento = $(this).data("page");
+
+        $.ajax({
+            url: "/Devedores/PagamentoParcela",
+            type: "POST",
+            data: {
+                id: Pagamento
+            },
+            success: function (retorno) {
+                $("#Pago_" + Pagamento).html(retorno.dataAtual);
+                $("#Desc_" + Pagamento).html(retorno.descricao);
+            }
+        });
     });
 
     $("#adicionar-campo").click(function () {
