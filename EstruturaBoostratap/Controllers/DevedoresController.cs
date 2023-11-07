@@ -262,8 +262,9 @@ namespace EstruturaBoostratap.Controllers
                 DateTime hoje = DateTime.Now;
                 for (int i = 1; i <= 3; i++)
                 {
-                    DateTime DataParcela = hoje.AddMonths(1);
-                    dados.GravarParcelas(ContratoID, i, (decimal)random.NextDouble(), DataParcela);
+                    decimal ValorParcela = 457 + (decimal)random.NextDouble() * 2;
+                    DateTime DataParcela = hoje.AddMonths(i);
+                    dados.GravarParcelas(ContratoID, i, ValorParcela, DataParcela);
                 }
 
                 return RedirectToAction("Edit", new { id = id, Mensagem = "Contrato gerado!", Tipo = 4 });

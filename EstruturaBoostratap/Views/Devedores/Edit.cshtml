@@ -190,8 +190,10 @@
                                                 <tr>
                                                     <td>@item2.NumeroParcela</td>
                                                     <td>@item2.ValorParcela</td>
-                                                    <td>@item2.DataVencimento</td>
-                                                    <td id="Pago_@item2.IDParcela">@item2.DataPagamento</td>
+                                                    <td>@item2.DataVencimento.ToString("dd/MM/yyyy")</td>
+                                                    <td id="Pago_@item2.IDParcela">
+                                                        @(item2.DataPagamento.ToString() == "01/01/0001 00:00:00" ? "" : item2.DataPagamento.ToString("dd/MM/yyyy"))
+                                                    </td>
                                                     <td id="Desc_@item2.IDParcela">@item2.Status</td>
                                                     <td><a data-page="@item2.IDParcela" class="btn btn-success btn-pagar"><i class="material-symbols-outlined fLeft">payments</i></a></td>
                                                 </tr>

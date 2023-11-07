@@ -233,7 +233,7 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendFormat("'{0}', ", ContratoID);
                 sql.AppendFormat("'{0}', ", NumeroParcela);
                 sql.AppendFormat("'{0}', ", LimpaReaisDecimal(ValorParcela.ToString()));
-                sql.AppendFormat("'{0}', ", DataVencimento);
+                sql.AppendFormat("'{0}', ", DataVencimento.ToString("yyyy-MM-dd"));
                 sql.AppendFormat("'{0}' ", 'A');
                 sql.AppendLine(");");
 
@@ -323,8 +323,8 @@ namespace EstruturaBoostratap.ModelViews
                         IDParcela = item.IDParcela,
                         NumeroParcela = item.NumeroParcela,
                         ValorParcela = item.ValorParcela,
-                        DataVencimento = FormatarData("user3", item.DataVencimento),
-                        DataPagamento = FormatarData("user3", item.DataPagamento),
+                        DataVencimento = item.DataVencimento.Date,
+                        DataPagamento = item.DataPagamento.Date,
                         Status = item.Status
                     };
 
@@ -818,8 +818,8 @@ namespace EstruturaBoostratap.ModelViews
         public int IDContrato { get; set; }
         public int NumeroParcela { get; set; }
         public string ValorParcela { get; set; }
-        public string DataVencimento { get; set; }
-        public string DataPagamento { get; set; }
+        public DateTime DataVencimento { get; set; }
+        public DateTime DataPagamento { get; set; }
         public string Status { get; set; }
         #endregion
     }
