@@ -174,7 +174,7 @@ namespace EstruturaBoostratap.Data.Commun
             {
 				string[] data_hora = data.Split(' ');
 				string[] array_data = data_hora[0].Split('/');
-				data_formatada = array_data[1] + "/" + array_data[0] + "/" + array_data[2];
+				data_formatada = array_data[0] + "/" + array_data[1] + "/" + array_data[2];
 			}
 
 			return data_formatada;

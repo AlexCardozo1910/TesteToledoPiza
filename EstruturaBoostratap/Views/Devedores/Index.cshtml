@@ -97,8 +97,12 @@
                             <td>@item.EmailDevedor</td>
                             <td>@item.CPFDevedor</td>
                             <td>@item.RGDevedor</td>
-                            <td><a data-fancybox-type="iframe" class="btn btn-light fancyboxIframe" asp-action="TelefonesDevedor" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">tty</i></a></td>
-                            <td></td>
+                            <td>
+                                <a data-fancybox-type="iframe" class="btn btn-light fancyboxIframe" asp-action="TelefonesDevedor" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined fLeft">tty</i></a>
+                            </td>
+                            <td>
+                                <a data-fancybox-type="iframe" class="btn btn-light fancyboxIframe" asp-action="ContratosDevedores" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined fLeft">file_open</i></a>
+                            </td>
                             <td>
                                 <a class="btn btn-success" role="button" asp-action="Edit" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">edit</i></a>
                                 <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-id="@item.DevedorID"><i class="material-symbols-outlined">delete</i></a>

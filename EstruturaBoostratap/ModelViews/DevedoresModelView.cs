@@ -28,7 +28,6 @@ namespace EstruturaBoostratap.ModelViews
         public string IBGE { get; set; }
         public string Complemento { get; set; }
 
-
         public List<DevedoresModelView> ListaDevedores { get; set; }
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
         public List<TelefonesDevedores> ListaTelefoneDevedores { get; set; }
