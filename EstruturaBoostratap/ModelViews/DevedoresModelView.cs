@@ -4,6 +4,7 @@ using EstruturaBoostratap.Data.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace EstruturaBoostratap.ModelViews
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
         public List<TelefonesDevedores> ListaTelefoneDevedores { get; set; }
         public List<Contratos> ListaContratos { get; set; }
+        public List<AcordosContratos> ListaParcelas { get; set; }
         #endregion
 
         #region *** METODOS ***
@@ -278,7 +280,8 @@ namespace EstruturaBoostratap.ModelViews
                         IDDevedor = item.IDDevedor,
                         NumeroContrato = item.NumeroContrato,
                         DataInclusao = item.DataInclusao,
-                        ListaParcelas = GetListaParcelas(item.IDContrato)
+                        ListaParcelas = GetListaParcelas(item.IDContrato),
+                        ParcelasVencidas = GetPossuiParcelas(item.IDContrato)
                     };
 
                     ListasContratos.Add(dados);
@@ -769,12 +772,67 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
-        public void GetAcordos()
+        public bool GetPossuiParcelas(int id)
         {
+
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
             try
             {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("COUNT(IDParcela) AS QTDParcelas");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDContrato = {0} ", id);
+                sql.AppendLine("AND ");
+                sql.AppendLine("DataVencimento < GETDATE(); ");
+
+                var Dados = conexao.Query<int>(sql.ToString());
+
+                if (Dados.First() > 0)
+                    return true;
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void GetAcordos(int id, int ContratoID, DateTime DataPagamento)
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            ListaParcelas = new List<AcordosContratos>();
+
+            try
+            {
+                var parametros = new DynamicParameters();
+                parametros.Add("@DevedorID", id);
+                parametros.Add("@ContratoID", ContratoID);
+                parametros.Add("@DataPagamento", DataPagamento);
+
+                var Dados = conexao.Query<AcordosContratos>("CalcularValoresAtualizados", parametros, commandType: CommandType.StoredProcedure).ToList();
+
+                foreach (var item in Dados)
+                {
+                    AcordosContratos dados = new AcordosContratos
+                    {
+                        CPF = item.CPF,
+                        Contrato = item.Contrato,
+                        DataPagamento = item.DataPagamento,
+                        ValorPrincipal = item.ValorPrincipal,
+                        ValorAtualizado = item.ValorAtualizado,
+                        Valor1Parcela = item.Valor1Parcela,
+                        Valor2Parcela = item.Valor2Parcela,
+                        Quitacao = item.Quitacao
+                    };
+
+                    ListaParcelas.Add(dados);
+                }
 
             }
             catch (Exception ex)
@@ -821,6 +879,7 @@ namespace EstruturaBoostratap.ModelViews
         public int IDDevedor { get; set; }
         public string NumeroContrato { get; set; }
         public DateTime DataInclusao { get; set; }
+        public bool ParcelasVencidas { get; set; }
 
         public List<Parcelas> ListaParcelas { get; set; }
         #endregion
@@ -838,4 +897,19 @@ namespace EstruturaBoostratap.ModelViews
         public string Status { get; set; }
         #endregion
     }
+
+    public class AcordosContratos
+    {
+        #region *** COMPONENTES ***
+        public string CPF { get; set; }
+        public string Contrato { get; set; }
+        public DateTime DataPagamento { get; set; }
+        public string ValorPrincipal { get; set; }
+        public string ValorAtualizado { get; set; }
+        public string Valor1Parcela { get; set; }
+        public string Valor2Parcela { get; set; }
+        public string Quitacao { get; set; }
+        #endregion
+    }
+
 }

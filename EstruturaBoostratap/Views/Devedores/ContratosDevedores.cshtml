@@ -22,9 +22,12 @@
                 </h2>
                 <div id="Contrato_@item.IDContrato" class="accordion-collapse collapse" aria-labelledby="Con_@item.IDContrato" data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body">
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a class="btn btn-primary btn-acordo" asp-action="RealizarAcordo" asp-route-id="@item.IDContrato">Realizar Acordo</a>
-                        </div>
+                        @if (item.ParcelasVencidas)
+                        {
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a class="btn btn-primary btn-acordo" asp-action="RealizarAcordo" asp-route-id="@Model.DevedorID" asp-route-contratoid="@item.IDContrato" target="_top">Realizar Acordo</a>
+                            </div>
+                        }
                         <table class="table table-striped table-hover">
                             <thead class="table-light">
                                 <tr>
@@ -42,8 +45,9 @@
                                     <tr>
                                         <td>@item2.NumeroParcela</td>
                                         <td>@item2.ValorParcela</td>
-                                        <td>@item2.DataVencimento</td>
-                                        <td id="Pago_@item2.IDParcela">@item2.DataPagamento</td>
+                                        <td>@item2.DataVencimento.ToString("dd/MM/yyyy")</td>
+                                        <td id="Pago_@item2.IDParcela">
+                                            @(item2.DataPagamento.ToString() == "01/01/0001 00:00:00" ? "" : item2.DataPagamento.ToString("dd/MM/yyyy"))
                                         <td id="Desc_@item2.IDParcela">@item2.Status</td>
                                         <td><a data-page="@item2.IDParcela" class="btn btn-success btn-pagar"><i class="material-symbols-outlined fLeft">payments</i></a></td>
                                     </tr>

@@ -3,10 +3,15 @@
     ViewData["Title"] = "Devedor";
 }
 
-@section Styles {}
+@section Styles {
+    <link href="~/lib/fancybox/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
+}
 @section Scripts {
-    <script src="/js/jquery.maskedinput-1.3.min.js"></script>
-    <script src="/js/jquery.maskMoney.js"></script>
+    <script src="~/lib/fancybox/jquery.fancybox.js"></script>
+    <script src="~/js/moment.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.datepicker.js"></script>
+    <script src="~/js/jquery.maskedinput-1.3.min.js"></script>
 }
 
 <h1 class="titulo-pagina">Devedor</h1>
@@ -173,9 +178,12 @@
                             </h2>
                             <div id="Contrato_@item.IDContrato" class="accordion-collapse collapse" aria-labelledby="Con_@item.IDContrato" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <a class="btn btn-primary btn-acordo fancyboxIframe" asp-action="RealizarAcordo" asp-route-id="@item.IDContrato">Realizar Acordo</a>
-                                    </div>
+                                    @if (item.ParcelasVencidas)
+                                    {
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <a class="btn btn-primary btn-acordo" asp-action="RealizarAcordo" asp-route-id="@Model.DevedorID" asp-route-contratoid="@item.IDContrato" target="_top">Realizar Acordo</a>
+                                        </div>
+                                    }
                                     <table class="table table-striped table-hover">
                                         <thead class="table-light">
                                             <tr>

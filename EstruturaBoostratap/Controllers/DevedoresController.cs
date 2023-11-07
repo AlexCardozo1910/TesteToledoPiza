@@ -294,12 +294,33 @@ namespace EstruturaBoostratap.Controllers
             }
         }
 
-        public ActionResult RealizarAcordo(int id)
+
+        public ActionResult RealizarAcordo(int contratoid)
         {
             DevedoresModelView dados = new DevedoresModelView();
 
             try
             {
+                return View(dados);
+            }
+            catch (Exception ex)
+            {
+                dados.MensagemReport = ex.Message;
+                return View(dados);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RealizarAcordo(int id, int contratoid, DateTime datapagamento)
+        {
+            DevedoresModelView dados = new DevedoresModelView();
+
+            try
+            {
+                dados.GetAcordos(id, contratoid, datapagamento);
+
                 return View(dados);
             }
             catch (Exception ex)
