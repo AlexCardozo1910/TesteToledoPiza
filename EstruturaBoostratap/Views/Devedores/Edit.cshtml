@@ -173,6 +173,9 @@
                             </h2>
                             <div id="Contrato_@item.IDContrato" class="accordion-collapse collapse" aria-labelledby="Con_@item.IDContrato" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a class="btn btn-primary btn-acordo fancyboxIframe" asp-action="RealizarAcordo" asp-route-id="@item.IDContrato">Realizar Acordo</a>
+                                    </div>
                                     <table class="table table-striped table-hover">
                                         <thead class="table-light">
                                             <tr>

@@ -294,6 +294,22 @@ namespace EstruturaBoostratap.Controllers
             }
         }
 
+        public ActionResult RealizarAcordo(int id)
+        {
+            DevedoresModelView dados = new DevedoresModelView();
+
+            try
+            {
+                return View(dados);
+            }
+            catch (Exception ex)
+            {
+                dados.MensagemReport = ex.Message;
+                return View(dados);
+            }
+
+        }
+
         public ActionResult DeleteTelefone(int id)
         {
             DevedoresModelView dados = new DevedoresModelView();

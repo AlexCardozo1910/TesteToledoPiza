@@ -769,6 +769,21 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
+        public void GetAcordos()
+        {
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
+        }
+
 
         #endregion
     }
