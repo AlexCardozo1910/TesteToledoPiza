@@ -60,6 +60,7 @@ span {
 .clear-titulo {
     clear: both;
     border-bottom: 1px solid #EEF0F1;
+    margin-bottom: 15px;
 }
 
 .fLeft {
@@ -659,4 +660,12 @@ a.article:hover {
     font-size: 18px;
     margin-top: 25px;
     margin-bottom: 0;
+}
+
+.tab-content {
+    margin-bottom: 20px;
+    background: #FFFFFF;
+    padding: 15px 20px 15px;
+    border-top: none;
+    border: solid 1px #e9e9ef;
 }
