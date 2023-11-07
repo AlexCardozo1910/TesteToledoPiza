@@ -15,6 +15,7 @@ namespace EstruturaBoostratap.ModelViews
     {
         #region *** COMPONENTES ***
         public int DevedorID { get; set; }
+        public int ContratoID { get; set; }
         public string DevedoresID { get; set; }
         public string NomeDevedor { get; set; }
         public string EmailDevedor { get; set; }
@@ -28,12 +29,14 @@ namespace EstruturaBoostratap.ModelViews
         public string Estado { get; set; }
         public string IBGE { get; set; }
         public string Complemento { get; set; }
+        public string ValorTotalParcelas { get; set; }
 
         public List<DevedoresModelView> ListaDevedores { get; set; }
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
         public List<TelefonesDevedores> ListaTelefoneDevedores { get; set; }
         public List<Contratos> ListaContratos { get; set; }
         public List<AcordosContratos> ListaParcelas { get; set; }
+        public List<Parcelas> ListaParcelasVencidas { get; set; }
         #endregion
 
         #region *** METODOS ***
@@ -263,6 +266,7 @@ namespace EstruturaBoostratap.ModelViews
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("SELECT ");
                 sql.AppendLine("IDContrato, ");
+                sql.AppendLine("IDDevedor, ");
                 sql.AppendLine("NumeroContrato, ");
                 sql.AppendLine("DataInclusao ");
                 sql.AppendLine("FROM ");
@@ -288,6 +292,86 @@ namespace EstruturaBoostratap.ModelViews
                 }
 
                 return ListasContratos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public List<Parcelas> GetListaParcelasVencidas(int id)
+        {
+            List<Parcelas> ListasParcelas = new List<Parcelas>();
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("IDParcela, ");
+                sql.AppendLine("NumeroParcela, ");
+                sql.AppendLine("FORMAT(ValorParcela, 'C', 'pt-BR') AS ValorParcela, ");
+                sql.AppendLine("CAST(DataVencimento AS DATE) AS DataVencimento, ");
+                sql.AppendLine("DATEDIFF(DAY, DataVencimento, GETDATE()) as DiasAbertos ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDContrato = {0} ", id);
+                sql.AppendLine("AND ");
+                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("AND ");
+                sql.AppendLine("Status = 'A' ");
+
+                var Dados = conexao.Query<Parcelas>(sql.ToString()).ToList();
+
+                GetTotalParcelasVencidas(id);
+
+                foreach (var item in Dados)
+                {
+                    Parcelas dados = new Parcelas
+                    {
+                        IDParcela = item.IDParcela,
+                        NumeroParcela = item.NumeroParcela,
+                        ValorParcela = item.ValorParcela,
+                        DataVencimento = item.DataVencimento.Date,
+                        DiasAbertos = item.DiasAbertos
+                    };
+
+                    ListasParcelas.Add(dados);
+                }
+
+                return ListasParcelas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public void GetTotalParcelasVencidas(int id)
+        {
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("FORMAT(SUM(ValorParcela), 'C', 'pt-BR') AS ValorTotalParcelas ");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDContrato = {0} ", id);
+                sql.AppendLine("AND ");
+                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("AND ");
+                sql.AppendLine("Status = 'A' ");
+
+                var Dados = conexao.Query<string>(sql.ToString());
+
+                ValorTotalParcelas = Dados.First();
+
             }
             catch (Exception ex)
             {
@@ -895,6 +979,7 @@ namespace EstruturaBoostratap.ModelViews
         public DateTime DataVencimento { get; set; }
         public DateTime DataPagamento { get; set; }
         public string Status { get; set; }
+        public int DiasAbertos { get; set; }
         #endregion
     }
 

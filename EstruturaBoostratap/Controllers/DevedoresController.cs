@@ -295,12 +295,16 @@ namespace EstruturaBoostratap.Controllers
         }
 
 
-        public ActionResult RealizarAcordo(int contratoid)
+        public ActionResult RealizarAcordo(int id, int contratoid)
         {
             DevedoresModelView dados = new DevedoresModelView();
 
             try
             {
+                dados.DevedorID = id;
+                dados.ContratoID = contratoid;
+                dados.ListaParcelasVencidas = dados.GetListaParcelasVencidas(contratoid);
+
                 return View(dados);
             }
             catch (Exception ex)
