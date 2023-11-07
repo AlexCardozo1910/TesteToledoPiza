@@ -139,6 +139,14 @@ $(document).ready(function () {
         });
     });
 
+    $("#Modalidade").change(function () {
+        var ModalidadeSelecionada = $(this).val();
+        if (ModalidadeSelecionada == 1)
+            $("#QTDParcela").prop("disabled", false);
+        else
+            $("#QTDParcela").prop("disabled", true);
+    });
+
     $("#adicionar-campo").click(function () {
         var novoCampo = $(".input-container:first").clone();
         novoCampo.find("input").val("");
@@ -148,9 +156,57 @@ $(document).ready(function () {
         $(".input-container:last").after(novoCampo);
     });
 
-    // Remover campo quando o botão "Remover" for clicado
     $("body").on("click", ".remover-campo", function () {
         $(this).closest(".input-container").remove();
+    });
+
+    $("#SimularOpcao").click(function () {
+        var DevedorID = $("#DevedorID").val();
+        var ContratoID = $("#ContratoID").val();
+        var DataPagamento = $("#data-pagamento").val();
+        var QTDParcela = $("#QTDParcela").val();
+
+        $.ajax({
+            url: "/Devedores/RealizarSimulacao",
+            type: "POST",
+            data: {
+                id: DevedorID,
+                contratoid: ContratoID,
+                datapagamento: DataPagamento
+            },
+            success: function (retorno) {
+                console.log(retorno);
+                var tabela = $('<table class="table table-striped table-hover">');
+                var cabecalho = $('<thead class="table-light">');
+                var cabecalhoRow = $("<tr>");
+                cabecalhoRow.append($("<th>").text("CPF"));
+                cabecalhoRow.append($("<th>").text("Contrato"));
+                cabecalhoRow.append($("<th>").text("Data de Pagamento"));
+                cabecalhoRow.append($("<th>").text("Valor Principal"));
+                cabecalhoRow.append($("<th>").text("Valor Atualizado"));
+                cabecalho.append(cabecalhoRow);
+
+                var corpoTabela = $("<tbody>");
+                var linha1 = $("<tr>");
+                linha1.append($("<td>").text(retorno.listaParcelas[0].cpf));
+                linha1.append($("<td>").text(retorno.listaParcelas[0].contrato));
+                linha1.append($("<td>").text(moment(retorno.listaParcelas[0].dataPagamento).format("DD/MM/YYYY")));
+                linha1.append($("<td>").text(retorno.listaParcelas[0].valorPrincipal));
+                if (QTDParcela == 1)
+                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG1Parcela));
+                else if (QTDParcela == 2)
+                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG2Parcela));
+                else
+                    linha1.append($("<td>").text(retorno.listaParcelas[0].quitacao));
+
+
+                corpoTabela.append(linha1);
+                tabela.append(cabecalho);
+                tabela.append(corpoTabela);
+
+                $("#RetornoCalculo").append(tabela);
+            }
+        });
     });
 
 });

@@ -309,19 +309,22 @@ namespace EstruturaBoostratap.ModelViews
             {
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("SELECT ");
-                sql.AppendLine("IDParcela, ");
-                sql.AppendLine("NumeroParcela, ");
-                sql.AppendLine("FORMAT(ValorParcela, 'C', 'pt-BR') AS ValorParcela, ");
-                sql.AppendLine("CAST(DataVencimento AS DATE) AS DataVencimento, ");
-                sql.AppendLine("DATEDIFF(DAY, DataVencimento, GETDATE()) as DiasAbertos ");
+                sql.AppendLine("T2.NumeroContrato, ");
+                sql.AppendLine("T1.IDParcela, ");
+                sql.AppendLine("T1.NumeroParcela, ");
+                sql.AppendLine("FORMAT(T1.ValorParcela, 'C', 'pt-BR') AS ValorParcela, ");
+                sql.AppendLine("T1.DataVencimento, ");
+                sql.AppendLine("DATEDIFF(DAY, T1.DataVencimento, GETDATE()) as DiasAbertos  ");
                 sql.AppendLine("FROM ");
-                sql.AppendLine("Parcelas");
+                sql.AppendLine("Parcelas T1");
+                sql.AppendLine("INNER JOIN ");
+                sql.AppendLine("Contratos T2 ON T1.IDContrato = T2.IDContrato");
                 sql.AppendLine("WHERE ");
-                sql.AppendFormat("IDContrato = {0} ", id);
+                sql.AppendFormat("T1.IDContrato = {0} ", id);
                 sql.AppendLine("AND ");
-                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("T1.DataVencimento < GETDATE() ");
                 sql.AppendLine("AND ");
-                sql.AppendLine("Status = 'A' ");
+                sql.AppendLine("T1.Status = 'A' ");
 
                 var Dados = conexao.Query<Parcelas>(sql.ToString()).ToList();
 
@@ -331,6 +334,7 @@ namespace EstruturaBoostratap.ModelViews
                 {
                     Parcelas dados = new Parcelas
                     {
+                        NumeroContrato = item.NumeroContrato,
                         IDParcela = item.IDParcela,
                         NumeroParcela = item.NumeroParcela,
                         ValorParcela = item.ValorParcela,
@@ -886,7 +890,7 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
-        public void GetAcordos(int id, int ContratoID, DateTime DataPagamento)
+        public List<AcordosContratos> GetAcordos(int id, int ContratoID, DateTime DataPagamento)
         {
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
@@ -897,7 +901,7 @@ namespace EstruturaBoostratap.ModelViews
                 var parametros = new DynamicParameters();
                 parametros.Add("@DevedorID", id);
                 parametros.Add("@ContratoID", ContratoID);
-                parametros.Add("@DataPagamento", DataPagamento);
+                parametros.Add("@DataPagamento", DataPagamento.ToString("yyyy-MM-dd"));
 
                 var Dados = conexao.Query<AcordosContratos>("CalcularValoresAtualizados", parametros, commandType: CommandType.StoredProcedure).ToList();
 
@@ -910,14 +914,15 @@ namespace EstruturaBoostratap.ModelViews
                         DataPagamento = item.DataPagamento,
                         ValorPrincipal = item.ValorPrincipal,
                         ValorAtualizado = item.ValorAtualizado,
-                        Valor1Parcela = item.Valor1Parcela,
-                        Valor2Parcela = item.Valor2Parcela,
+                        PG1Parcela = item.PG1Parcela,
+                        PG2Parcela = item.PG2Parcela,
                         Quitacao = item.Quitacao
                     };
 
                     ListaParcelas.Add(dados);
                 }
 
+                return ListaParcelas;
             }
             catch (Exception ex)
             {
@@ -972,6 +977,7 @@ namespace EstruturaBoostratap.ModelViews
     public class Parcelas
     {
         #region *** COMPONENTES ***
+        public string NumeroContrato { get; set; }
         public int IDParcela { get; set; }
         public int IDContrato { get; set; }
         public int NumeroParcela { get; set; }
@@ -991,8 +997,8 @@ namespace EstruturaBoostratap.ModelViews
         public DateTime DataPagamento { get; set; }
         public string ValorPrincipal { get; set; }
         public string ValorAtualizado { get; set; }
-        public string Valor1Parcela { get; set; }
-        public string Valor2Parcela { get; set; }
+        public string PG1Parcela { get; set; }
+        public string PG2Parcela { get; set; }
         public string Quitacao { get; set; }
         #endregion
     }

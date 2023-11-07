@@ -315,17 +315,15 @@ namespace EstruturaBoostratap.Controllers
 
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RealizarAcordo(int id, int contratoid, DateTime datapagamento)
+        public ActionResult RealizarSimulacao(int id, int contratoid, DateTime datapagamento)
         {
             DevedoresModelView dados = new DevedoresModelView();
 
             try
             {
-                dados.GetAcordos(id, contratoid, datapagamento);
+                var retornoDados = dados.GetAcordos(id, contratoid, datapagamento);
 
-                return View(dados);
+                return Json(dados);
             }
             catch (Exception ex)
             {
