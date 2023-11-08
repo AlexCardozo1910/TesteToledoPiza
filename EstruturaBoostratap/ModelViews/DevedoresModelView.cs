@@ -325,7 +325,7 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("T1.IDContrato = {0} ", id);
                 sql.AppendLine("AND ");
-                sql.AppendLine("T1.DataVencimento < GETDATE() ");
+                sql.AppendLine("T1.DataVencimento < DATEADD(DAY, -1, GETDATE()) ");
                 sql.AppendLine("AND ");
                 sql.AppendLine("T1.Status = 'A' ");
 
@@ -878,7 +878,7 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("IDContrato = {0} ", id);
                 sql.AppendLine("AND ");
-                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("DataVencimento < DATEADD(DAY, -1, GETDATE()) ");
                 sql.AppendLine("AND ");
                 sql.AppendLine("Status = 'A'; ");
 
@@ -913,7 +913,7 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("IDContrato = {0} ", id);
                 sql.AppendLine("AND ");
-                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("DataVencimento < DATEADD(DAY, -1, GETDATE()) ");
                 sql.AppendLine("AND ");
                 sql.AppendLine("Status = 'A' ");
 
