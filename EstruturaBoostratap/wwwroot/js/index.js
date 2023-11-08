@@ -170,6 +170,23 @@ $(document).ready(function () {
         var Modalidade = $("#Modalidade").val();
         var QTDParcela = $("#QTDParcela").val();
 
+        if (DataPagamento == "") {
+            alert("Informe Uma Data Para Pagamento!");
+            return false;
+        }
+
+        if (Modalidade == "") {
+            alert("Selecione Uma Modalidade de Pagamento!");
+            return false;
+        }
+
+        if (Modalidade == 1) {
+            if (QTDParcela == "") {
+                alert("Informe a Quantidade de Parcelas!");
+                return false;
+            }
+        }
+
         $.ajax({
             url: "/Devedores/RealizarSimulacao",
             type: "POST",
