@@ -163,9 +163,11 @@ $(document).ready(function () {
     });
 
     $("#SimularOpcao").click(function () {
+
         var DevedorID = $("#DevedorID").val();
         var ContratoID = $("#ContratoID").val();
         var DataPagamento = $("#data-pagamento").val();
+        var Modalidade = $("#Modalidade").val();
         var QTDParcela = $("#QTDParcela").val();
 
         $.ajax({
@@ -174,7 +176,9 @@ $(document).ready(function () {
             data: {
                 id: DevedorID,
                 contratoid: ContratoID,
-                datapagamento: DataPagamento
+                datapagamento: DataPagamento,
+                modalidade: Modalidade,
+                qtdparcela: QTDParcela
             },
             success: function (retorno) {
                 console.log(retorno);
@@ -196,12 +200,7 @@ $(document).ready(function () {
                 linha1.append($("<td>").text(moment(retorno.listaParcelas[0].dataPagamento).format("DD/MM/YYYY")));
                 linha1.append($("<td>").text(retorno.listaParcelas[0].valorPrincipal));
                 linha1.append($("<td>").text(retorno.listaParcelas[0].valorAtualizado));
-                if (QTDParcela == 1)
-                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG1Parcela));
-                else if (QTDParcela == 2)
-                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG2Parcelas));
-                else
-                    linha1.append($("<td>").text(retorno.listaParcelas[0].quitacao));
+                linha1.append($("<td>").text(retorno.listaParcelas[0].valorFinal));
 
 
                 corpoTabela.append(linha1);

@@ -303,6 +303,7 @@ namespace EstruturaBoostratap.Controllers
             {
                 dados.DevedorID = id;
                 dados.ContratoID = contratoid;
+                dados.ListaQuantidadeParcelasVencidas(contratoid);
                 dados.ListaParcelasVencidas = dados.GetListaParcelasVencidas(contratoid);
 
                 return View(dados);
@@ -315,13 +316,13 @@ namespace EstruturaBoostratap.Controllers
 
         }
 
-        public ActionResult RealizarSimulacao(int id, int contratoid, DateTime datapagamento)
+        public ActionResult RealizarSimulacao(int id, int contratoid, DateTime datapagamento, int modalidade, int qtdparcela)
         {
             DevedoresModelView dados = new DevedoresModelView();
 
             try
             {
-                var retornoDados = dados.GetAcordos(id, contratoid, datapagamento);
+                var retornoDados = dados.GetAcordos(id, contratoid, datapagamento, modalidade, qtdparcela);
 
                 return Json(dados);
             }

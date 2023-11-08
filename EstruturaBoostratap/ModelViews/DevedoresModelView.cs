@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EstruturaBoostratap.Data.Commun;
 using EstruturaBoostratap.Data.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace EstruturaBoostratap.ModelViews
         public string IBGE { get; set; }
         public string Complemento { get; set; }
         public string ValorTotalParcelas { get; set; }
+        public int QTDParcela { get; set; }
 
         public List<DevedoresModelView> ListaDevedores { get; set; }
         public List<DevedoresEndereco> ListaEnderecoDevedores { get; set; }
@@ -37,6 +39,7 @@ namespace EstruturaBoostratap.ModelViews
         public List<Contratos> ListaContratos { get; set; }
         public List<AcordosContratos> ListaParcelas { get; set; }
         public List<Parcelas> ListaParcelasVencidas { get; set; }
+        public List<SelectListItem> ListaQTDParcelas { get; set; }
         #endregion
 
         #region *** METODOS ***
@@ -270,7 +273,7 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("NumeroContrato, ");
                 sql.AppendLine("DataInclusao ");
                 sql.AppendLine("FROM ");
-                sql.AppendLine("Contratos");
+                sql.AppendLine("Contratos ");
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("IDDevedor = {0} ", id);
 
@@ -875,7 +878,9 @@ namespace EstruturaBoostratap.ModelViews
                 sql.AppendLine("WHERE ");
                 sql.AppendFormat("IDContrato = {0} ", id);
                 sql.AppendLine("AND ");
-                sql.AppendLine("DataVencimento < GETDATE(); ");
+                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("AND ");
+                sql.AppendLine("Status = 'A'; ");
 
                 var Dados = conexao.Query<int>(sql.ToString());
 
@@ -890,7 +895,46 @@ namespace EstruturaBoostratap.ModelViews
             }
         }
 
-        public List<AcordosContratos> GetAcordos(int id, int ContratoID, DateTime DataPagamento)
+        public void ListaQuantidadeParcelasVencidas(int id)
+        {
+
+            SqlConnection conexao = new SqlConnection(DBModel.strConn);
+
+            ListaQTDParcelas = new List<SelectListItem>();
+
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT ");
+                sql.AppendLine("COUNT(IDParcela) AS QTDParcelas");
+                sql.AppendLine("FROM ");
+                sql.AppendLine("Parcelas");
+                sql.AppendLine("WHERE ");
+                sql.AppendFormat("IDContrato = {0} ", id);
+                sql.AppendLine("AND ");
+                sql.AppendLine("DataVencimento < GETDATE() ");
+                sql.AppendLine("AND ");
+                sql.AppendLine("Status = 'A' ");
+
+                var Dados = conexao.Query<int>(sql.ToString());
+
+                ListaQTDParcelas.Add(new SelectListItem() { Text = "", Value = "" });
+
+                for (int i = 1; i <= Dados.First() -1 ; i++)
+                {
+                    ListaQTDParcelas.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public List<AcordosContratos> GetAcordos(int id, int ContratoID, DateTime DataPagamento, int modalidade, int qtdparcela)
         {
             SqlConnection conexao = new SqlConnection(DBModel.strConn);
 
@@ -902,6 +946,8 @@ namespace EstruturaBoostratap.ModelViews
                 parametros.Add("@DevedorID", id);
                 parametros.Add("@ContratoID", ContratoID);
                 parametros.Add("@DataPagamento", DataPagamento.ToString("yyyy-MM-dd"));
+                parametros.Add("@Modalidade", modalidade);
+                parametros.Add("@QTDParcelas", qtdparcela);
 
                 var Dados = conexao.Query<AcordosContratos>("CalcularValoresAtualizados", parametros, commandType: CommandType.StoredProcedure).ToList();
 
@@ -914,9 +960,7 @@ namespace EstruturaBoostratap.ModelViews
                         DataPagamento = item.DataPagamento,
                         ValorPrincipal = item.ValorPrincipal,
                         ValorAtualizado = item.ValorAtualizado,
-                        PG1Parcela = item.PG1Parcela,
-                        PG2Parcelas = item.PG2Parcelas,
-                        Quitacao = item.Quitacao
+                        ValorFinal = item.ValorFinal
                     };
 
                     ListaParcelas.Add(dados);
@@ -997,9 +1041,7 @@ namespace EstruturaBoostratap.ModelViews
         public DateTime DataPagamento { get; set; }
         public string ValorPrincipal { get; set; }
         public string ValorAtualizado { get; set; }
-        public string PG1Parcela { get; set; }
-        public string PG2Parcelas { get; set; }
-        public string Quitacao { get; set; }
+        public string ValorFinal { get; set; }
         #endregion
     }
 

@@ -60,17 +60,17 @@
     </div>
     <div class="col-md-3 mb3">
         <label for="Modalidade">Selecione Uma Modalidade</label>
-        <select name="Modalidade" id="Modalidade" class="form-select" aria-label="Default select example">
+        <select name="Modalidade" id="Modalidade" class="form-select">
             <option value=""></option>
             <option value="1">Parcial</option>
             <option value="2">Quitação</option>
         </select>
     </div>
-    <div id="ParcelasQTD" class="col-md-2 mb2">
+    <div id="ParcelasQTD" class="col-md-3 mb3">
         <label for="QTDParcela">Informe a Quantidade de Parcela</label>
-        <input type="text" name="QTDParcela" id="QTDParcela" class="form-control">
+        @Html.DropDownListFor(x => x.QTDParcela, new SelectList(Model.ListaQTDParcelas, "Value", "Text", Model.ListaQTDParcelas), new { @id = "QTDParcela", @class = "form-select" })
     </div>
-    <div class="col-md-1 mb1">
+    <div class="col-md-2 mb2">
         <div id="SimularOpcao" class="btn btn-success" style="margin-top: 16px;"><i class="material-symbols-outlined fLeft">point_of_sale</i> Simular</div>
     </div>
 </div>
