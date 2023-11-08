@@ -141,10 +141,12 @@ $(document).ready(function () {
 
     $("#Modalidade").change(function () {
         var ModalidadeSelecionada = $(this).val();
-        if (ModalidadeSelecionada == 1)
+        if (ModalidadeSelecionada == 1) {
             $("#QTDParcela").prop("disabled", false);
-        else
+        } else {
             $("#QTDParcela").prop("disabled", true);
+            $("#QTDParcela").val("");
+        }
     });
 
     $("#adicionar-campo").click(function () {
@@ -184,6 +186,7 @@ $(document).ready(function () {
                 cabecalhoRow.append($("<th>").text("Data de Pagamento"));
                 cabecalhoRow.append($("<th>").text("Valor Principal"));
                 cabecalhoRow.append($("<th>").text("Valor Atualizado"));
+                cabecalhoRow.append($("<th>").text("Valor Modalidade"));
                 cabecalho.append(cabecalhoRow);
 
                 var corpoTabela = $("<tbody>");
@@ -192,10 +195,11 @@ $(document).ready(function () {
                 linha1.append($("<td>").text(retorno.listaParcelas[0].contrato));
                 linha1.append($("<td>").text(moment(retorno.listaParcelas[0].dataPagamento).format("DD/MM/YYYY")));
                 linha1.append($("<td>").text(retorno.listaParcelas[0].valorPrincipal));
+                linha1.append($("<td>").text(retorno.listaParcelas[0].valorAtualizado));
                 if (QTDParcela == 1)
                     linha1.append($("<td>").text(retorno.listaParcelas[0].pG1Parcela));
                 else if (QTDParcela == 2)
-                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG2Parcela));
+                    linha1.append($("<td>").text(retorno.listaParcelas[0].pG2Parcelas));
                 else
                     linha1.append($("<td>").text(retorno.listaParcelas[0].quitacao));
 

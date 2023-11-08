@@ -915,7 +915,7 @@ namespace EstruturaBoostratap.ModelViews
                         ValorPrincipal = item.ValorPrincipal,
                         ValorAtualizado = item.ValorAtualizado,
                         PG1Parcela = item.PG1Parcela,
-                        PG2Parcela = item.PG2Parcela,
+                        PG2Parcelas = item.PG2Parcelas,
                         Quitacao = item.Quitacao
                     };
 
@@ -998,7 +998,7 @@ namespace EstruturaBoostratap.ModelViews
         public string ValorPrincipal { get; set; }
         public string ValorAtualizado { get; set; }
         public string PG1Parcela { get; set; }
-        public string PG2Parcela { get; set; }
+        public string PG2Parcelas { get; set; }
         public string Quitacao { get; set; }
         #endregion
     }
