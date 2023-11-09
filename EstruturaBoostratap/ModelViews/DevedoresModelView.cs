@@ -921,7 +921,7 @@ namespace EstruturaBoostratap.ModelViews
 
                 ListaQTDParcelas.Add(new SelectListItem() { Text = "", Value = "" });
 
-                for (int i = 1; i <= Dados.First() -1 ; i++)
+                for (int i = 1; i <= Dados.First() -1; i++)
                 {
                     ListaQTDParcelas.Add(new SelectListItem() { Text = i.ToString(), Value = i.ToString() });
                 }
